@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hilal – Soleil & Lune Panorama</title>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- External Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/suncalc/1.9.0/suncalc.min.js"></script>
+    <script async src="https://www.peakfinder.com/script/peakfinder.1.0.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+    <!-- Sélecteur de langue -->
+    <div class="language-selector">
+        <div class="lang-dropdown">
+            <button class="lang-dropdown-btn" id="langDropdownBtn">
+                <span class="lang-flag" id="currentLangFlag">🇫🇷</span>
+                <span id="currentLangText">Français</span>
+                <span style="font-size: 12px;">▼</span>
+            </button>
+            <div class="lang-dropdown-content" id="langDropdown">
+                <div class="lang-option active" data-lang="fr">
+                    <span class="lang-flag">🇫🇷</span>
+                    <span>Français</span>
+                </div>
+                <div class="lang-option" data-lang="en">
+                    <span class="lang-flag">🇬🇧</span>
+                    <span>English</span>
+                </div>
+                <div class="lang-option" data-lang="ar">
+                    <span class="lang-flag">🇸🇦</span>
+                    <span>عربي</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <!-- En-tête avec titre centré -->
+        <div class="page-header">
+            <h1 id="pageTitle">Observation du Croissant Lunaire (Hilal)</h1>
+        </div>
+        
+        <div class="grid-3">
+            <!-- Première carte : Position -->
+            <div class="card">
+                <h2 id="positionTitle">1. Position</h2>
+                
+                <!-- Champ de recherche par nom -->
+                <label for="locationSearch" id="searchLabel">Rechercher un lieu :</label>
+                <input type="text" id="locationSearch" placeholder="Ex: Paris, France (Appuyez sur Entrée)" autocomplete="off">
+                <div id="searchResults" class="search-results"></div>
+                <div id="searchLoading" class="search-loading">Recherche en cours...</div>
+                
+                <!-- Bouton de localisation automatique -->
+                <button class="location-btn" id="locationBtn">📍 Ma Position Actuelle</button>
+                
+                <!-- Champ pour le nom du lieu (automatique) -->
+                <div class="location-name-container">
+                    <input type="text" id="locationName" class="location-name-input" placeholder="Nom du lieu (sera rempli automatiquement)" readonly>
+                </div>
+                
+                <label for="lat" id="latLabel">Latitude</label>
+                <input id="lat" type="number" step="0.000001" value="36.20534" min="-90" max="90">
+                <div id="latError" class="error-message">La latitude doit être entre -90° et 90°</div>
+                
+                <label for="lng" id="lngLabel">Longitude</label>
+                <input id="lng" type="number" step="0.000001" value="5.41173" min="-180" max="180">
+                <div id="lngError" class="error-message">La longitude doit être entre -180° et 180°</div>
+                
+                <label for="ele" id="eleLabel">Altitude (m)</label>
+                <input id="ele" type="number" value="0">
+            </div>
+            
+            <!-- Deuxième carte : Carte Interactive -->
+            <div class="card">
+                <h2 id="mapTitle">2. Carte Interactive</h2>
+                <div class="btn-group" id="mapButtons">
+                    <button data-layer="osm" class="active" id="mapBtnStandard">Standard</button>
+                    <button data-layer="relief" id="mapBtnRelief">Relief</button>
+                    <button data-layer="sat" id="mapBtnSatellite">Satellite</button>
+                </div>
+                <div id="map"></div>
+            </div>
+            
+            <!-- Troisième carte : Date et Critère de Visibilité -->
+            <div class="card">
+                <h2 id="dateTitle">3. Date et Critère de Visibilité</h2>
+                <label for="date" id="dateLabel">Date</label>
+                <input id="date" type="date">
+                <label for="criterion" id="criterionLabel">Critère de visibilité</label>
+                <select id="criterion">
+                    <option value="yallop">Yallop (Recommandé)</option>
+                    <option value="saao">SAAO (Afrique du Sud)</option>
+                    <option value="odeh">Odeh (Précis)</option>
+                    <option value="danjon">Danjon (Élongation)</option>
+                </select>
+                <button class="primary" id="updateBtn">Mettre à jour</button>
+            </div>
+        </div>
+        
+        <!-- Quatrième carte : Informations Astronomiques -->
+        <div class="card" id="info">
+            <h2 id="infoTitle">4. Informations Astronomiques</h2>
+            <p id="loadingText">Chargement des données...</p>
+        </div>
+        
+        <!-- Cinquième carte : Panorama -->
+        <div class="card">
+            <h2 id="panoramaTitle">5. Panorama du Relief</h2>
+            <div class="content">
+                <canvas id="pfcanvas"></canvas>
+                <div id="pfcanvasprogress">
+                    <div class="spinner"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Note d'utilisation -->
+        <div class="usage-note" id="usageNote"></div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/language.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/calculations.js"></script>
+    <script src="js/panorama.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
